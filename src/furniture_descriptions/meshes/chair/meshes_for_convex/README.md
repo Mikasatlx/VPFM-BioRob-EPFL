@@ -1,0 +1,1 @@
+`.dae` meshes in this folder are used to compute convex shapes of separate chair model parts using `dae2qhull.sh` script from [`robot_script`](https://gite.lirmm.fr/multi-contact/robot_script) repository

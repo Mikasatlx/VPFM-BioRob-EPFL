@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<robot name="wall" xmlns:xacro="http://wiki.ros.org/xacro">
+
+    <xacro:arg name="prefix" default="wall_"/>
+    <xacro:arg name="connected_to" default=""/>
+    <xacro:arg name="xyz" default="'0 0 0'"/>
+    <xacro:arg name="rpy" default="'0 0 0'"/>
+    <xacro:arg name="mass" default="8.0"/>
+    <xacro:arg name="fixed" default="1"/>
+    <xacro:arg name="dim" default="12 0.1 1"/>
+
+    <xacro:include filename="$(find furniture_descriptions)/urdf/wall.xacro"/>
+
+    <xacro:wall prefix="$(arg prefix)" connected_to="$(arg connected_to)" xyz="$(arg xyz)" rpy="$(arg rpy)"
+                mass="$(arg mass)" fixed="$(arg fixed)" dim="$(arg dim)"/>
+</robot>

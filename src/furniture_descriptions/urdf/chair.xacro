@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<robot name="chair_sim" xmlns:xacro="http://wiki.ros.org/xacro">
+
+    <xacro:macro name="chair"
+                 params="prefix='chair_' connected_to:='' xyz:='0 0 0' rpy:='0 0 0' mass=2.0, fixed:=1">
+
+        <xacro:if value="${fixed == 1}">
+            <xacro:if value="${connected_to == ''}">
+                <link name="world"/>
+                <xacro:property name="base_frame_name" value="world"/>
+            </xacro:if>
+            <xacro:unless value="${connected_to == ''}">
+                <xacro:property name="base_frame_name" value="${connected_to}"/>
+            </xacro:unless>
+            <xacro:if value="${connected_to == 'odom'}">
+                <link name="odom"/>
+                <xacro:property name="base_frame_name" value="odom"/>
+            </xacro:if>
+
+            <joint name="${prefix}base_to_${base_frame_name}" type="fixed">
+                <parent link="${base_frame_name}"/>
+                <child link="${prefix}base_link"/>
+                <origin rpy="${rpy}" xyz="${xyz}"/>
+            </joint>
+        </xacro:if>
+
+        <link name="${prefix}base_link"/>
+        <joint name="${prefix}base" type="fixed">
+            <parent link="${prefix}base_link"/>
+            <child link="${prefix}main"/>
+        </joint>
+
+        <link name="${prefix}main">
+            <visual>
+                <geometry>
+                    <mesh filename="package://furniture_descriptions/meshes/chair/chair.dae"/>
+                </geometry>
+            </visual>
+            <collision>
+                <origin xyz="0 0 0.25" rpy="0 0 0"/>
+                <geometry>
+                    <box size="0.5 0.5 0.5"/>
+                </geometry>
+            </collision>
+        </link>
+
+        <!-- virtual links for convex shapes of chair parts -->
+        <link name="${prefix}back_support"/>
+        <joint name="${prefix}back_joint" type="fixed">
+            <parent link="${prefix}main"/>
+            <child link="${prefix}back_support"/>
+        </joint>
+
+        <link name="${prefix}left_handle"/>
+        <joint name="${prefix}lhandle_joint" type="fixed">
+            <parent link="${prefix}main"/>
+            <child link="${prefix}left_handle"/>
+        </joint>
+
+        <link name="${prefix}right_handle"/>
+        <joint name="${prefix}rhandle_joint" type="fixed">
+            <parent link="${prefix}main"/>
+            <child link="${prefix}right_handle"/>
+        </joint>
+
+        <link name="${prefix}leg_fl"/>
+        <joint name="${prefix}leg_fl_joint" type="fixed">
+            <parent link="${prefix}main"/>
+            <child link="${prefix}leg_fl"/>
+        </joint>
+
+        <link name="${prefix}leg_fr"/>
+        <joint name="${prefix}leg_fr_joint" type="fixed">
+            <parent link="${prefix}main"/>
+            <child link="${prefix}leg_fr"/>
+        </joint>
+
+        <link name="${prefix}leg_rl"/>
+        <joint name="${prefix}leg_rl_joint" type="fixed">
+            <parent link="${prefix}main"/>
+            <child link="${prefix}leg_rl"/>
+        </joint>
+
+        <link name="${prefix}leg_rr"/>
+        <joint name="${prefix}leg_rr_joint" type="fixed">
+            <parent link="${prefix}main"/>
+            <child link="${prefix}leg_rr"/>
+        </joint>
+
+    </xacro:macro>
+
+</robot>

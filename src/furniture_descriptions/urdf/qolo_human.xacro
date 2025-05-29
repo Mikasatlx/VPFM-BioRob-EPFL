@@ -1,0 +1,981 @@
+<?xml version="1.0"?>
+<robot name="qolo_human_sim" xmlns:xacro="http://wiki.ros.org/xacro">
+
+    <xacro:macro name="qolo_human"
+                 params="prefix='qolo_human_' connected_to:='' xyz:='0 0 0' rpy:='0 0 0' mass=3.0, fixed:=1">
+
+        <material name="gray">
+            <color rgba="0.7 0.7 0.7 1"/>
+        </material>
+        <material name="dark_gray">
+            <color rgba="0.4 0.4 0.4 1"/>
+        </material>
+
+        <xacro:if value="${fixed == 1}">
+            <xacro:if value="${connected_to == ''}">
+                <link name="world"/>
+                <xacro:property name="base_frame_name" value="world"/>
+            </xacro:if>
+            <xacro:unless value="${connected_to == ''}">
+                <xacro:property name="base_frame_name" value="${connected_to}"/>
+            </xacro:unless>
+            <xacro:if value="${connected_to == 'odom'}">
+                <link name="odom"/>
+                <xacro:property name="base_frame_name" value="odom"/>
+            </xacro:if>
+
+            <joint name="${prefix}base_to_${base_frame_name}" type="fixed">
+                <parent link="${base_frame_name}"/>
+                <child link="${prefix}base_link"/>
+                <origin rpy="${rpy}" xyz="${xyz}"/>
+            </joint>
+        </xacro:if>
+
+        <link name="${prefix}base_link">
+            <inertial>
+                <origin rpy="0 0 0" xyz="-0.160 0 0.184"/>
+                <mass value="50"/>
+                <inertia ixx="22.23722770713" ixy="-0.04006835911" ixz="-0.02300035044" iyy="17.58011380849"
+                         iyz="-0.02387139307" izz="28.82981259528"/>
+            </inertial>
+            <visual>
+                <geometry>
+                    <mesh filename="package://furniture_descriptions/meshes/qolo/qolo_main.stl" scale="1 1 1"/>
+                </geometry>
+                <origin rpy="0 0 0" xyz="0 0 0"/>
+                <material name="gray"/>
+            </visual>
+            <collision>
+                <geometry>
+                    <mesh filename="package://furniture_descriptions/meshes/qolo/qolo_main.stl" scale="1 1 1"/>
+                </geometry>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+            </collision>
+        </link>
+
+        <link name="${prefix}wheel_right">
+            <inertial>
+                <origin rpy="0 0 0" xyz="0 0 0"/>
+                <mass value="1.5"/>
+                <inertia ixx="5.0001" ixy="0" ixz="0" iyy="1.0001" iyz="0" izz="5.0001"/>
+            </inertial>
+            <visual>
+                <geometry>
+                    <mesh filename="package://furniture_descriptions/meshes/qolo/qolo_wheel.stl" scale="1 1 1"/>
+                </geometry>
+                <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
+                <material name="dark_gray"/>
+            </visual>
+            <collision>
+                <geometry>
+                    <mesh filename="package://furniture_descriptions/meshes/qolo/qolo_wheel.stl" scale="1 1 1"/>
+                </geometry>
+                <origin rpy="1.57079632679 0 0" xyz="0 0 0"/>
+            </collision>
+        </link>
+        <joint name="${prefix}main_to_wheel_right" type="fixed">
+            <parent link="${prefix}base_link"/>
+            <child link="${prefix}wheel_right"/>
+            <origin xyz="0 0.2 0"/>
+            <axis xyz="0 1 0"/>
+        </joint>
+
+        <link name="${prefix}wheel_left">
+            <inertial>
+                <origin rpy="0 0 0" xyz="0 0 0"/>
+                <mass value="1.5"/>
+                <inertia ixx="5.0001" ixy="0" ixz="0" iyy="1.0001" iyz="0" izz="5.0001"/>
+            </inertial>
+            <visual>
+                <geometry>
+                    <mesh filename="package://furniture_descriptions/meshes/qolo/qolo_wheel.stl" scale="1 1 1"/>
+                </geometry>
+                <origin rpy="-1.57079632679 0 0" xyz="0 0 0"/>
+                <material name="dark_gray"/>
+            </visual>
+            <collision>
+                <geometry>
+                    <mesh filename="package://furniture_descriptions/meshes/qolo/qolo_wheel.stl" scale="1 1 1"/>
+                </geometry>
+                <origin rpy="-1.57079632679 0 0" xyz="0 0 0"/>
+            </collision>
+        </link>
+        <joint name="${prefix}main_to_wheel_left" type="fixed">
+            <parent link="${prefix}base_link"/>
+            <child link="${prefix}wheel_left"/>
+            <origin xyz="0 -0.2 0"/>
+            <axis xyz="0 1 0"/>
+        </joint>
+
+        <link name="${prefix}bumper">
+            <inertial>
+                <origin rpy="0 0 0" xyz="0 0 0"/>
+                <mass value="1.5"/>
+                <inertia ixx="0.02155077848" ixy="0.00000859993" ixz="0.00000332812" iyy="0.03332543416"
+                         iyz="0.00575422413" izz="0.04216038950"/>
+            </inertial>
+            <visual>
+                <geometry>
+                    <mesh filename="package://furniture_descriptions/meshes/qolo/bumper.stl" scale="1 1 1"/>
+                </geometry>
+                <origin rpy="0 0 1.57079632679" xyz="0 0 0"/>
+                <material name="gray"/>
+            </visual>
+            <collision>
+                <geometry>
+                    <mesh filename="package://furniture_descriptions/meshes/qolo/bumper.stl" scale="1 1 1"/>
+                </geometry>
+                <origin rpy="0 0 1.57079632679" xyz="0 0 0"/>
+            </collision>
+        </link>
+        <joint name="${prefix}main_to_bumper" type="fixed">
+            <parent link="${prefix}base_link"/>
+            <child link="${prefix}bumper"/>
+            <origin xyz="0.035 0 0.015"/>
+            <axis xyz="1 0 0"/>
+        </joint>
+
+        <joint name="base" type="fixed">
+	    <parent link="${prefix}base_link"/>
+	    <child link="HipsLink"/>
+	    <origin rpy="0 0 0" xyz="-0.25 0 0.87"/>
+	 </joint>
+
+        <link name="HipsLink">
+	    <inertial>
+	      <origin rpy="0 0 0" xyz="-0.0232 0.0 -0.1192"/>
+	      <mass value="20.9238"/>
+	      <inertia ixx="-0.3225" ixy="-0.0" ixz="-0.0" iyy="0.0" iyz="0.2362" izz="0.0"/>
+	    </inertial>
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/HipsLinkFull.dae"/>
+	      </geometry>
+	    </visual>
+	    <collision>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/HipsLinkFull.dae"/>
+	      </geometry>
+	    </collision>
+	 </link>
+	  
+	 <link name="TorsoLink">
+	    <inertial>
+	      <origin rpy="0 0 0" xyz="-0.1334 0.0 0.4701"/>
+	      <mass value="10.7790"/>
+	      <inertia ixx="-0.3481" ixy="-0.0" ixz="-0.0" iyy="0.0" iyz="0.2709" izz="0.0"/>
+	    </inertial>
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/TorsoLinkFull.dae"/>
+	      </geometry>
+	    </visual>
+	    <collision>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/TorsoLinkFull.dae"/>
+	      </geometry>
+	    </collision>
+	 </link>
+	 
+	 <link name="HeadLink">
+	    <inertial>
+	      <origin rpy="0 0 0" xyz="0.0459 0.0 0.0433"/>
+	      <mass value="4.7372"/>
+	      <inertia ixx="-0.1891" ixy="-0.0" ixz="-0.0" iyy="0.0" iyz="0.1891" izz="0.0"/>
+	    </inertial>
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/HeadLinkFull.dae"/>
+	      </geometry>
+	    </visual>
+	    <collision>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/HeadLinkFull.dae"/>
+	      </geometry>
+	    </collision>
+	 </link>
+	 
+	 <link name="LLegLink">
+	    <inertial>
+	      <origin rpy="0 0 0" xyz="-0.0185 -0.0071 -0.178"/>
+	      <mass value="6.51"/>
+	      <inertia ixx="-0.1264" ixy="-0.0" ixz="-0.0" iyy="0.0" iyz="0.1264" izz="0.0"/>
+	    </inertial>
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/LLegLink.dae"/>
+	      </geometry>
+	    </visual>
+	    <collision>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/LLegLink.dae"/>
+	      </geometry>
+	    </collision>
+	  </link>
+
+	  <link name="LShinLink">
+	    <inertial>
+	      <origin rpy="0 0 0" xyz="-0.0131 0.0025 0.0346"/>
+	      <mass value="3.095"/>
+	      <inertia ixx="-0.0632" ixy="-0.0" ixz="-0.0" iyy="0.0" iyz="0.0632" izz="0.0"/>
+	    </inertial>
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/LShinLink.dae"/>
+	      </geometry>
+	    </visual>
+	    <collision>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/LShinLink.dae"/>
+	      </geometry>
+	    </collision>
+	  </link>
+
+	  <link name="LAnkleLink">
+	    <inertial>
+	      <origin rpy="0 0 0" xyz="0.0508 0.0067 -0.0646"/>
+	      <mass value="0.99"/>
+	      <inertia ixx="-0.0015" ixy="-0.0" ixz="-0.0" iyy="0.0" iyz="0.0059" izz="0.0"/>
+	    </inertial>
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/LAnkleLinkFull.dae"/>
+	      </geometry>
+	    </visual>
+	    <collision>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/LAnkleLinkFull.dae"/>
+	      </geometry>
+	    </collision>
+	  </link>
+
+	  <link name="RLegLink">
+	    <inertial>
+	      <origin rpy="0 0 0" xyz="-0.0185 -0.0071 -0.178"/>
+	      <mass value="6.51"/>
+	      <inertia ixx="-0.1264" ixy="-0.0" ixz="-0.0" iyy="0.0" iyz="0.1264" izz="0.0"/>
+	    </inertial>
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/RLegLink.dae"/>
+	      </geometry>
+	    </visual>
+	    <collision>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/RLegLink.dae"/>
+	      </geometry>
+	    </collision>
+	  </link>
+
+	  <link name="RShinLink">
+	    <inertial>
+	      <origin rpy="0 0 0" xyz="-0.0131 0.0025 0.0346"/>
+	      <mass value="3.095"/>
+	      <inertia ixx="-0.0632" ixy="-0.0" ixz="-0.0" iyy="0.0" iyz="0.0632" izz="0.0"/>
+	    </inertial>
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/RShinLink.dae"/>
+	      </geometry>
+	    </visual>
+	    <collision>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/RShinLink.dae"/>
+	      </geometry>
+	    </collision>
+	  </link>
+
+	  <link name="RAnkleLink">
+	    <inertial>
+	      <origin rpy="0 0 0" xyz="0.0508 -0.0067 -0.0646"/>
+	      <mass value="0.99"/>
+	      <inertia ixx="-0.0015" ixy="-0.0" ixz="-0.0" iyy="0.0" iyz="0.0059" izz="0.0"/>
+	    </inertial>
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/RAnkleLinkFull.dae"/>
+	      </geometry>
+	    </visual>
+	    <collision>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/RAnkleLinkFull.dae"/>
+	      </geometry>
+	    </collision>
+	  </link>
+	  
+	    <link name="LArmLink">
+	    <inertial>
+	      <origin rpy="0 0 0" xyz="-0.0 0.1328 0.0"/>
+	      <mass value="1.96"/>
+	      <inertia ixx="-0.3475" ixy="-0.0" ixz="-0.0" iyy="0.0" iyz="0.6719" izz="0.0"/>
+	    </inertial>
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/LArmLinkFull.dae"/>
+	      </geometry>
+	    </visual>
+	    <collision>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/LArmLinkFull.dae"/>
+	      </geometry>
+	    </collision>
+	  </link>
+
+	  <link name="LElbowLink">
+	    <inertial>
+	      <origin rpy="0 0 0" xyz="0.000513 0.034528 -0.000934"/>
+	      <mass value="0.25"/>
+	      <inertia ixx="-5.9e-05" ixy="-0.0" ixz="-0.0" iyy="0.0" iyz="8e-05" izz="0.0"/>
+	    </inertial>
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/LElbowLink.dae"/>
+	      </geometry>
+	    </visual>
+	    <collision>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/LElbowLink.dae"/>
+	      </geometry>
+	    </collision>
+	  </link>
+
+	  <link name="LForearmLink">
+	    <inertial>
+	      <origin rpy="0 0 0" xyz="-0.0 0.15114 0.0"/>
+	      <mass value="1.18"/>
+	      <inertia ixx="-0.0753" ixy="-0.0" ixz="-0.0" iyy="0.0" iyz="0.1326" izz="0.0"/>
+	    </inertial>
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/LForearmLink.dae"/>
+	      </geometry>
+	    </visual>
+	    <collision>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/LForearmLink.dae"/>
+	      </geometry>
+	    </collision>
+	  </link>
+
+	  <link name="LHandLink">
+	    <inertial>
+	      <origin rpy="0 0 0" xyz="0.0139 0.042 -0.0128"/>
+	      <mass value="0.272"/>
+	      <inertia ixx="-0.00029946" ixy="-0.0" ixz="-0.0" iyy="0.0" iyz="0.00019118" izz="0.0"/>
+	    </inertial>
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/LWrist.dae"/>
+	      </geometry>
+	    </visual>
+	    <collision>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/LWrist.dae"/>
+	      </geometry>
+	    </collision>
+	  </link>
+
+	  <link name="RArmLink">
+	    <inertial>
+	      <origin rpy="0 0 0" xyz="-0.0 -0.1328 0.0"/>
+	      <mass value="1.96"/>
+	      <inertia ixx="-0.3475" ixy="-0.0" ixz="-0.0" iyy="0.0" iyz="0.6719" izz="0.0"/>
+	    </inertial>
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/RArmLinkFull.dae"/>
+	      </geometry>
+	    </visual>
+	    <collision>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/RArmLinkFull.dae"/>
+	      </geometry>
+	    </collision>
+	  </link>
+
+	  <link name="RElbowLink">
+	    <inertial>
+	      <origin rpy="0 0 0" xyz="0.000513 -0.034528 -0.000934"/>
+	      <mass value="0.25"/>
+	      <inertia ixx="-5.9e-05" ixy="-0.0" ixz="-0.0" iyy="0.0" iyz="8e-05" izz="0.0"/>
+	    </inertial>
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/RElbowLink.dae"/>
+	      </geometry>
+	    </visual>
+	    <collision>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/RElbowLink.dae"/>
+	      </geometry>
+	    </collision>
+	  </link>
+
+	  <link name="RForearmLink">
+	    <inertial>
+	      <origin rpy="0 0 0" xyz="-0.0 -0.15114 0.0"/>
+	      <mass value="1.18"/>
+	      <inertia ixx="-0.0753" ixy="-0.0" ixz="-0.0" iyy="0.0" iyz="0.1326" izz="0.0"/>
+	    </inertial>
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/RForearmLink.dae"/>
+	      </geometry>
+	    </visual>
+	    <collision>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/RForearmLink.dae"/>
+	      </geometry>
+	    </collision>
+	  </link>
+
+	  <link name="RHandLink">
+	    <inertial>
+	      <origin rpy="0 0 0" xyz="0.0139 -0.042 -0.0128"/>
+	      <mass value="0.272"/>
+	      <inertia ixx="-0.00029946" ixy="-0.0" ixz="-0.0" iyy="0.0" iyz="0.00019118" izz="0.0"/>
+	    </inertial>
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/RWrist.dae"/>
+	      </geometry>
+	    </visual>
+	    <collision>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/RWrist.dae"/>
+	      </geometry>
+	    </collision>
+	  </link>
+	 
+	 <joint name="torso" type="fixed">
+	    <parent link="HipsLink"/>
+	    <child link="TorsoLink"/>
+	    <origin rpy="0.0 0.0 0.0" xyz="-0.0 0.0 0.0"/>
+	 </joint>
+	 
+	 <joint name="Head_0" type="fixed">
+	    <parent link="TorsoLink"/>
+	    <child link="HeadLink"/>
+	    <origin rpy="0.0 0.0 0.0" xyz="-0.025 0.0 0.525"/>
+	 </joint>
+	 
+	 <joint name="LLeg_0" type="fixed">
+	    <parent link="HipsLink"/>
+	    <child link="LLegLink"/>
+	    <origin rpy="0.1 -0.2 0.0" xyz="-0.0 0.1 -0.15"/>
+	  </joint>
+	  
+	  <joint name="LShin_0" type="fixed">
+	    <parent link="LLegLink"/>
+	    <child link="LShinLink"/>
+	    <origin rpy="-0.13 0.2 0.0" xyz="-0.025 0.0 -0.35"/>
+	  </joint>
+	  
+	  <joint name="LAnkle_0" type="fixed">
+	    <parent link="LShinLink"/>
+	    <child link="LAnkleLink"/>
+	    <origin rpy="0.0 0.0 0.0" xyz="-0.025 0.0 -0.375"/>
+	  </joint>
+	  
+	  <joint name="RLeg_0" type="fixed">
+	    <parent link="HipsLink"/>
+	    <child link="RLegLink"/>
+	    <origin rpy="-0.1 -0.2 0.0" xyz="-0.0 -0.1 -0.15"/>
+	  </joint>
+	  
+	  <joint name="RShin_0" type="fixed">
+	    <parent link="RLegLink"/>
+	    <child link="RShinLink"/>
+	    <origin rpy="0.13 0.2 0.0" xyz="-0.025 0.0 -0.35"/>
+	  </joint>
+	  
+	  <joint name="RAnkle_0" type="fixed">
+	    <parent link="RShinLink"/>
+	    <child link="RAnkleLink"/>
+	    <origin rpy="0.0 0.0 0.0" xyz="-0.025 0.0 -0.375"/>
+	  </joint>
+	  
+	  <joint name="LArm_0" type="fixed">
+	    <parent link="TorsoLink"/>
+	    <child link="LArmLink"/>
+	    <origin rpy="-1 0.0 0.0" xyz="-0.05 0.15 0.35"/>
+	  </joint>
+	  
+	  <joint name="LElbow" type="fixed">
+	    <parent link="LArmLink"/>
+	    <child link="LElbowLink"/>
+	    <origin rpy="0 0.0 -0.2" xyz="-0.0 0.2 0.0"/>
+	  </joint>
+	  
+	  <joint name="LForearm" type="fixed">
+	    <parent link="LElbowLink"/>
+	    <child link="LForearmLink"/>
+	    <origin rpy="-0.2 0.0 0.0" xyz="-0.01 0.05 0.0"/>
+	  </joint>
+	  
+	  <joint name="LWrist_0" type="fixed">
+	    <parent link="LForearmLink"/>
+	    <child link="LHandLink"/>
+	    <origin rpy="0.0 0.0 0.0" xyz="0.01 0.24 -0.01"/>
+	  </joint>
+	  
+	 <joint name="RArm_0" type="fixed">
+	    <parent link="TorsoLink"/>
+	    <child link="RArmLink"/>
+	    <origin rpy="1 0.0 0.0" xyz="-0.05 -0.15 0.35"/>
+	  </joint>
+	  
+	  <joint name="RElbow" type="fixed">
+	    <parent link="RArmLink"/>
+	    <child link="RElbowLink"/>
+	    <origin rpy="0 0.0 0.2" xyz="0.0 -0.2 0.0"/>
+	  </joint>
+	  
+	  <joint name="RForearm" type="fixed">
+	    <parent link="RElbowLink"/>
+	    <child link="RForearmLink"/>
+	    <origin rpy="0.2 0.0 0.0" xyz="-0.01 -0.05 0.0"/>
+	  </joint>
+	  
+	  <joint name="RWrist_0" type="fixed">
+	    <parent link="RForearmLink"/>
+	    <child link="RHandLink"/>
+	    <origin rpy="0.0 0.0 0.0" xyz="0.01 -0.24 -0.01"/>
+	  </joint>
+	  
+	  <link name="LHandThumb0Link">
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/LThumb0thPhalange.dae"/>
+	      </geometry>
+	    </visual>
+	  </link>
+	  <link name="LHandThumb1Link">
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/LThumb1stPhalange.dae"/>
+	      </geometry>
+	    </visual>
+	  </link>
+	  <link name="LHandThumb2Link">
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/LThumb2ndPhalange.dae"/>
+	      </geometry>
+	    </visual>
+	  </link>
+	  <link name="LHandIndex1Link">
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/LIndex1stPhalange.dae"/>
+	      </geometry>
+	    </visual>
+	  </link>
+	  <link name="LHandIndex2Link">
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/LIndex2ndPhalange.dae"/>
+	      </geometry>
+	    </visual>
+	  </link>
+	  <link name="LHandIndex3Link">
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/LIndex3rdPhalange.dae"/>
+	      </geometry>
+	    </visual>
+	  </link>
+	  <link name="LHandMiddle1Link">
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/LMiddle1stPhalange.dae"/>
+	      </geometry>
+	    </visual>
+	  </link>
+	  <link name="LHandMiddle2Link">
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/LMiddle2ndPhalange.dae"/>
+	      </geometry>
+	    </visual>
+	  </link>
+	  <link name="LHandMiddle3Link">
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/LMiddle3rdPhalange.dae"/>
+	      </geometry>
+	    </visual>
+	  </link>
+	  <link name="LHandRing1Link">
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/LRing1stPhalange.dae"/>
+	      </geometry>
+	    </visual>
+	  </link>
+	  <link name="LHandRing2Link">
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/LRing2ndPhalange.dae"/>
+	      </geometry>
+	    </visual>
+	  </link>
+	  <link name="LHandRing3Link">
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/LRing3rdPhalange.dae"/>
+	      </geometry>
+	    </visual>
+	  </link>
+	  <link name="LHandBaby1Link">
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/LBaby1stPhalange.dae"/>
+	      </geometry>
+	    </visual>
+	  </link>
+	  <link name="LHandBaby2Link">
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/LBaby2ndPhalange.dae"/>
+	      </geometry>
+	    </visual>
+	  </link>
+	  <link name="LHandBaby3Link">
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/LBaby3rdPhalange.dae"/>
+	      </geometry>
+	    </visual>
+	  </link>
+	  
+	 <link name="RHandThumb0Link">
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/RThumb0thPhalange.dae"/>
+	      </geometry>
+	    </visual>
+	  </link>
+	  <link name="RHandThumb1Link">
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/RThumb1stPhalange.dae"/>
+	      </geometry>
+	    </visual>
+	  </link>
+	  <link name="RHandThumb2Link">
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/RThumb2ndPhalange.dae"/>
+	      </geometry>
+	    </visual>
+	  </link>
+	  <link name="RHandIndex1Link">
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/RIndex1stPhalange.dae"/>
+	      </geometry>
+	    </visual>
+	  </link>
+	  <link name="RHandIndex2Link">
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/RIndex2ndPhalange.dae"/>
+	      </geometry>
+	    </visual>
+	  </link>
+	  <link name="RHandIndex3Link">
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/RIndex3rdPhalange.dae"/>
+	      </geometry>
+	    </visual>
+	  </link>
+	  <link name="RHandMiddle1Link">
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/RMiddle1stPhalange.dae"/>
+	      </geometry>
+	    </visual>
+	  </link>
+	  <link name="RHandMiddle2Link">
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/RMiddle2ndPhalange.dae"/>
+	      </geometry>
+	    </visual>
+	  </link>
+	  <link name="RHandMiddle3Link">
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/RMiddle3rdPhalange.dae"/>
+	      </geometry>
+	    </visual>
+	  </link>
+	  <link name="RHandRing1Link">
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/RRing1stPhalange.dae"/>
+	      </geometry>
+	    </visual>
+	  </link>
+	  <link name="RHandRing2Link">
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/RRing2ndPhalange.dae"/>
+	      </geometry>
+	    </visual>
+	  </link>
+	  <link name="RHandRing3Link">
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/RRing3rdPhalange.dae"/>
+	      </geometry>
+	    </visual>
+	  </link>
+	  <link name="RHandBaby1Link">
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/RBaby1stPhalange.dae"/>
+	      </geometry>
+	    </visual>
+	  </link>
+	  <link name="RHandBaby2Link">
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/RBaby2ndPhalange.dae"/>
+	      </geometry>
+	    </visual>
+	  </link>
+	  <link name="RHandBaby3Link">
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+		<mesh filename="package://furniture_descriptions/meshes/human/RBaby3rdPhalange.dae"/>
+	      </geometry>
+	    </visual>
+	  </link>
+		 
+
+	  <!-- Left hand finger joints -->
+	  <joint name="LHandThumbLink1" type="fixed">
+	    <parent link="LHandLink"/>
+	    <child link="LHandThumb0Link"/>
+	    <origin rpy="0.5 0.0 0.9" xyz="0.025 0.016 -0.016"/>
+	  </joint>
+	  <joint name="LHandThumbLink2" type="fixed">
+	    <parent link="LHandThumb0Link"/>
+	    <child link="LHandThumb1Link"/>
+	    <origin rpy="0.0 0.0 0.0" xyz="0.03 0.0 0.0"/>
+	  </joint>
+	  <joint name="LHandThumbLink3" type="fixed">
+	    <parent link="LHandThumb1Link"/>
+	    <child link="LHandThumb2Link"/>
+	    <origin rpy="0.0 0.0 0.0" xyz="0.026 0.0 0.0"/>
+	  </joint>
+	  <joint name="LHandIndexLink1" type="fixed">
+	    <parent link="LHandLink"/>
+	    <child link="LHandIndex1Link"/>
+	    <origin rpy="-0.1 0.0 0.0" xyz="0.0425 0.078 -0.01"/>
+	  </joint>
+	  <joint name="LHandIndexLink2" type="fixed">
+	    <parent link="LHandIndex1Link"/>
+	    <child link="LHandIndex2Link"/>
+	    <origin rpy="-0.1 0.0 0.0" xyz="-0.0 0.035 0.0"/>
+	  </joint>
+	  <joint name="LHandIndexLink3" type="fixed">
+	    <parent link="LHandIndex2Link"/>
+	    <child link="LHandIndex3Link"/>
+	    <origin rpy="-0.1 0.0 0.0" xyz="-0.0 0.022 0.0"/>
+	  </joint>
+	  <joint name="LHandMiddleLink1" type="fixed">
+	    <parent link="LHandLink"/>
+	    <child link="LHandMiddle1Link"/>
+	    <origin rpy="-0.1 0.0 0.0" xyz="0.02 0.09 -0.01"/>
+	  </joint>
+	  <joint name="LHandMiddleLink2" type="fixed">
+	    <parent link="LHandMiddle1Link"/>
+	    <child link="LHandMiddle2Link"/>
+	    <origin rpy="-0.1 0.0 0.0" xyz="-0.0 0.028 0.0"/>
+	  </joint>
+	  <joint name="LHandMiddleLink3" type="fixed">
+	    <parent link="LHandMiddle2Link"/>
+	    <child link="LHandMiddle3Link"/>
+	    <origin rpy="-0.1 0.0 0.0" xyz="-0.0 0.025 0.0"/>
+	  </joint>
+	  <joint name="LHandRingLink1" type="fixed">
+	    <parent link="LHandLink"/>
+	    <child link="LHandRing1Link"/>
+	    <origin rpy="-0.1 0.0 0.0" xyz="-0.001 0.085 -0.01"/>
+	  </joint>
+	  <joint name="LHandRingLink2" type="fixed">
+	    <parent link="LHandRing1Link"/>
+	    <child link="LHandRing2Link"/>
+	    <origin rpy="-0.1 0.0 0.0" xyz="-0.0 0.0225 0.0"/>
+	  </joint>
+	  <joint name="LHandRingLink3" type="fixed">
+	    <parent link="LHandRing2Link"/>
+	    <child link="LHandRing3Link"/>
+	    <origin rpy="-0.1 0.0 0.0" xyz="-0.0 0.028 0.0"/>
+	  </joint>
+	  <joint name="LHandBabyLink1" type="fixed">
+	    <parent link="LHandLink"/>
+	    <child link="LHandBaby1Link"/>
+	    <origin rpy="-0.1 0.0 0.0" xyz="-0.015 0.079 -0.022"/>
+	  </joint>
+	  <joint name="LHandBabyLink2" type="fixed">
+	    <parent link="LHandBaby1Link"/>
+	    <child link="LHandBaby2Link"/>
+	    <origin rpy="-0.1 0.0 0.0" xyz="-0.0 0.02 0.0"/>
+	  </joint>
+	  <joint name="LHandBabyLink3" type="fixed">
+	    <parent link="LHandBaby2Link"/>
+	    <child link="LHandBaby3Link"/>
+	    <origin rpy="-0.1 0.0 0.0" xyz="-0.0 0.02 0.0"/>
+	  </joint>
+	  
+	  <!-- Right hand finger joints -->
+	  <joint name="RHandThumbLink1" type="fixed">
+	    <parent link="RHandLink"/>
+	    <child link="RHandThumb0Link"/>
+	    <origin rpy="-0.5 0.0 -0.9" xyz="0.025 -0.016 -0.016"/>
+	  </joint>
+	  <joint name="RHandThumbLink2" type="fixed">
+	    <parent link="RHandThumb0Link"/>
+	    <child link="RHandThumb1Link"/>
+	    <origin rpy="0.0 0.0 0.0" xyz="0.03 0.0 0.0"/>
+	  </joint>
+	  <joint name="RHandThumbLink3" type="fixed">
+	    <parent link="RHandThumb1Link"/>
+	    <child link="RHandThumb2Link"/>
+	    <origin rpy="0.0 0.0 0.0" xyz="0.026 0.0 0.0"/>
+	  </joint>
+	  <joint name="RHandIndexLink1" type="fixed">
+	    <parent link="RHandLink"/>
+	    <child link="RHandIndex1Link"/>
+	    <origin rpy="0.1 0.0 0.0" xyz="0.0425 -0.078 -0.01"/>
+	  </joint>
+	  <joint name="RHandIndexLink2" type="fixed">
+	    <parent link="RHandIndex1Link"/>
+	    <child link="RHandIndex2Link"/>
+	    <origin rpy="0.1 0.0 0.0" xyz="-0.0 -0.035 0.0"/>
+	  </joint>
+	  <joint name="RHandIndexLink3" type="fixed">
+	    <parent link="RHandIndex2Link"/>
+	    <child link="RHandIndex3Link"/>
+	    <origin rpy="0.1 0.0 0.0" xyz="-0.0 -0.022 0.0"/>
+	  </joint>
+	  <joint name="RHandMiddleLink1" type="fixed">
+	    <parent link="RHandLink"/>
+	    <child link="RHandMiddle1Link"/>
+	    <origin rpy="0.1 0.0 0.0" xyz="0.02 -0.09 -0.01"/>
+	  </joint>
+	  <joint name="RHandMiddleLink2" type="fixed">
+	    <parent link="RHandMiddle1Link"/>
+	    <child link="RHandMiddle2Link"/>
+	    <origin rpy="0.1 0.0 0.0" xyz="-0.0 -0.028 0.0"/>
+	  </joint>
+	  <joint name="RHandMiddleLink3" type="fixed">
+	    <parent link="RHandMiddle2Link"/>
+	    <child link="RHandMiddle3Link"/>
+	    <origin rpy="0.1 0.0 0.0" xyz="-0.0 -0.025 0.0"/>
+	  </joint>
+	  <joint name="RHandRingLink1" type="fixed">
+	    <parent link="RHandLink"/>
+	    <child link="RHandRing1Link"/>
+	    <origin rpy="0.1 0.0 0.0" xyz="-0.001 -0.085 -0.01"/>
+	  </joint>
+	  <joint name="RHandRingLink2" type="fixed">
+	    <parent link="RHandRing1Link"/>
+	    <child link="RHandRing2Link"/>
+	    <origin rpy="0.1 0.0 0.0" xyz="-0.0 -0.0225 0.0"/>
+	  </joint>
+	  <joint name="RHandRingLink3" type="fixed">
+	    <parent link="RHandRing2Link"/>
+	    <child link="RHandRing3Link"/>
+	    <origin rpy="0.1 0.0 0.0" xyz="-0.0 -0.028 0.0"/>
+	  </joint>
+	  <joint name="RHandBabyLink1" type="fixed">
+	    <parent link="RHandLink"/>
+	    <child link="RHandBaby1Link"/>
+	    <origin rpy="0.1 0.0 0.0" xyz="-0.015 -0.079 -0.022"/>
+	  </joint>
+	  <joint name="RHandBabyLink2" type="fixed">
+	    <parent link="RHandBaby1Link"/>
+	    <child link="RHandBaby2Link"/>
+	    <origin rpy="0.1 0.0 0.0" xyz="-0.0 -0.02 0.0"/>
+	  </joint>
+	  <joint name="RHandBabyLink3" type="fixed">
+	    <parent link="RHandBaby2Link"/>
+	    <child link="RHandBaby3Link"/>
+	    <origin rpy="0.1 0.0 0.0" xyz="-0.0 -0.02 0.0"/>
+	  </joint>
+			  
+	  
+
+    </xacro:macro>
+
+</robot>
