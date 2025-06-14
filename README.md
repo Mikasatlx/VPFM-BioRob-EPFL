@@ -18,7 +18,8 @@ This repository contains the source code of the paper "Velocity Potential Field 
 ```
 
 ## Acknowledgments
-This work was supported by Project IMEC-EPFL
+This work was supported by Project IMEC-EPFL.
+
 This repository is developed based on the **[`dynamic_obstacle_avoidance`](https://github.com/epfl-lasa/dynamic_obstacle_avoidance)**
 
 ## Prerequisite
