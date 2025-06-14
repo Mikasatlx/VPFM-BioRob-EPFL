@@ -1,5 +1,5 @@
 # Velocity Potential Field Modulation for Dense Coordination of Polytopic Swarms and Its Application to Assistive Robotic Furniture
-This repository contains the source code of the paper "Velocity Potential Field Modulation for Dense Coordination of Polytopic Swarms and Its Application to Assistive Robotic Furniture", IEEE Robotics and Automation Letters ( Volume: 10, Issue: 7, July 2025) 
+This repository contains the source code of the paper "Velocity Potential Field Modulation for Dense Coordination of Polytopic Swarms and Its Application to Assistive Robotic Furniture", IEEE Robotics and Automation Letters (Volume: 10, Issue: 7, July 2025) 
 
 | **[`IEEE_Xplore`](https://ieeexplore.ieee.org/document/11027457)** |
 
@@ -18,11 +18,6 @@ This repository contains the source code of the paper "Velocity Potential Field 
   keywords={Robots;Robot kinematics;Collision avoidance;Shape;Modulation;Dynamical systems;Wheelchairs;System recovery;Robot sensing systems;Mobile robots;Collision avoidance;path planning for multiple mobile robots or agents;swarm robotics},
   doi={10.1109/LRA.2025.3577423}}
 ```
-
-## Acknowledgments
-This work was supported by Project IMEC-EPFL.
-
-This repository is developed based on the **[`dynamic_obstacle_avoidance`](https://github.com/epfl-lasa/dynamic_obstacle_avoidance)**
 
 ## Prerequisite
 - Ubuntu20.04 / Unbuntu22.04
@@ -80,6 +75,11 @@ python3 scripts/auto_assembly_irregular_polytopic_parts.py
 ```shell
 python3 scripts/clear_way_for_user.py
 ```
+
+## Acknowledgments
+This work was supported by Project IMEC-EPFL.
+
+This repository is developed based on the **[`dynamic_obstacle_avoidance`](https://github.com/epfl-lasa/dynamic_obstacle_avoidance)**
 
 ## Contact
 Lixuan Tang (lixuan.tang@epfl.ch), Biorobotics Laboratory (BioRob), EPFL  
