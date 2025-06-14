@@ -1,0 +1,6 @@
+numpy
+keyboard
+pyyaml
+transforms3d
+pandas
+seaborn

@@ -1,0 +1,13 @@
+# Requirement
+# python=3.9
+wheel
+numpy
+setuptools
+filterpy
+
+# For testing / development 
+ipython   # For testing pusposes only | remove later
+matplotlib    # For testing pusposes only | remove later
+scipy   # For testing pusposes only | remove later
+
+# pynput # -> gives an error (?!)

@@ -1,1 +1,0 @@
-assistive_furniture_interfaces/Furniture[] furniture

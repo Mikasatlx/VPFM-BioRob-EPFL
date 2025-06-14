@@ -1,0 +1,15 @@
+{
+    mode: 1, # choose different coordination algorithms: 1->VPFM; 2->Safe-HDSM; 3->VPF; 4->DSM
+    static attractor: 0, # choose the type of attractors: 0->dynamic attractor; 1->static attractor
+
+    # kinematic constraints
+    maximum linear velocity: 0.6, # m/s
+    maximum angular velocity: 1.5, # rad/s
+    maximum linear acceleration: 10.0, # m/s²
+    maximum angular acceleration: 10.0, # rad/s²
+
+    sensing range: 3, # m
+    
+    static: false, # choose the type of objects: false->dynamic robot; 1->static obstacle
+    name: "mobile_furniture", 
+}
