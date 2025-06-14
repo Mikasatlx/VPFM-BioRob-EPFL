@@ -18,7 +18,7 @@ This repository contains the source code of the paper "Velocity Potential Field 
 ```
 
 ## Acknowledgments
-This work was supported by Project IMEC-EPFL.
+This work was supported by Project IMEC-EPFL
 This repository is developed based on the **[`dynamic_obstacle_avoidance`](https://github.com/epfl-lasa/dynamic_obstacle_avoidance)**
 
 ## Prerequisite
@@ -31,8 +31,10 @@ Create a virtual environment inside the workspace folder /VPFM-BioRob-EPFL
 ```shell
 git clone https://github.com/Mikasatlx/VPFM-BioRob-EPFL.git
 cd VPFM-BioRob-EPFL
+
 virtualenv venv
 source ./venv/bin/activate
+
 pip3 install -r requirements.txt
 pip3 install -e .
 
