@@ -18,7 +18,8 @@ This repository contains the source code of the paper "Velocity Potential Field 
 ```
 
 ## Acknowledgments
-This repositoty is developed based on the **[`dynamic_obstacle_avoidance`](https://github.com/epfl-lasa/dynamic_obstacle_avoidance)**
+This work was supported by Project IMEC-EPFL.
+This repository is developed based on the **[`dynamic_obstacle_avoidance`](https://github.com/epfl-lasa/dynamic_obstacle_avoidance)**
 
 ## Prerequisite
 - Ubuntu20.04 / Unbuntu22.04
@@ -71,7 +72,7 @@ python3 scripts/clear_way_for_user.py
 ```
 
 ## Contact
-Lixuan Tang (lixuan.tang@epfl.ch)  
+Lixuan Tang (lixuan.tang@epfl.ch), Biorobotics Laboratory (BioRob), EPFL  
 
 ## References     
 > [1] L. Huber, A. Billard, and J. -J. Slotine, “Avoidance of convex and concave obstacles with convergence ensured through contraction,” IEEE Robot. Automat. Lett., vol. 4, no. 2, pp. 1462–1469, Apr. 2019.
