@@ -3,7 +3,7 @@ This repository contains the source code of the paper "Velocity Potential Field 
 
 | **[`IEEE_Xplore`](https://ieeexplore.ieee.org/document/11027457)** |
 
-![Example](docs/real_world.pdf)
+![Example](docs/real_world.png)
 
 ## Citation
 ```
@@ -52,7 +52,7 @@ pip3 install -e .
 
 ## Simulation Demos
 
-![Example](docs/pics_1.pdf)
+![Example](docs/pics_1.png)
 
 Source the virtual environment inside the workspace folder /VPFM-BioRob-EPFL
 ```shell
@@ -74,7 +74,7 @@ python3 scripts/dense_reconfiguration_regular_hexegon.py
 python3 scripts/auto_assembly_irregular_polytopic_parts.py
 ```
 
-![Example](docs/pics_2.pdf)
+![Example](docs/pics_2.png)
 
 ### Clear the Way for the User
 ```shell
